@@ -15,5 +15,13 @@ pipeline {
                 sh 'npm install --no-audit'
             }
         }
+        stage('NPM Dependencies Audit check') {
+            steps {
+                sh '''
+                    npm audit --audit-level=critical
+                    echo $?
+                '''
+            }
+        }
     }
 }
