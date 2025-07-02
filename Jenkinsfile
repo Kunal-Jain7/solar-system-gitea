@@ -3,7 +3,6 @@ pipeline {
     tools {
         nodejs 'nodejs2260'
     }
-
     stages {
         stage('Node JS version') {
             steps {
