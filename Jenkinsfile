@@ -23,5 +23,14 @@ pipeline {
                 '''
             }
         }
+        stage('OWASP Dependencies Check') {
+            steps {
+                dependencyCheck additionalArguments: '''
+                    --scan ./
+                    --format ALL
+                    --out ./
+                    --prettyPrint''', odcInstallation: 'owasp1003'
+            }
+        }
     }
 }
