@@ -10,5 +10,10 @@ pipeline {
                 sh 'npm -v'
             }
         }
+        stage('Install NodeJs Dependencies') {
+            steps {
+                sh 'npm install --no-audit'
+            }
+        }
     }
 }
