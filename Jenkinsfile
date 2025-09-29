@@ -32,6 +32,7 @@ pipeline {
                             --format ALL
                             --out ./
                             --prettyPrint''', odcInstallation: 'owasp1003'
+                        dependencyCheckPublisher failedTotalCritical: 1, pattern: 'dependency-check-report.html', stopBuild: true
                     }
                 }
             }
