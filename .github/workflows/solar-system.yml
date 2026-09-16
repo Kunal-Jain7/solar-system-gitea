@@ -65,6 +65,7 @@ jobs:
 
   docker-login:
     name: Containerization
+    needs: [unit-testing, code-coverage]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code Repository
@@ -75,3 +76,23 @@ jobs:
         with:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD}}
+
+      - name: Docker Build for Testing
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: ${{ vars.DOCKER_USERNAME }}/solar-system:$ {{ github.sha }}
+
+      - name: Docker Image Testing
+        run: |
+          docker images
+          docker run --name solar-system app -d \
+            -p 3000:3000 \
+            -e MONGO_URI=${{ env.MONGO_URI }} \
+            -e MONGO_USERNAME=${{ env.MONGO_USERNAME }} \
+            -e MONGO_PASSWORD=${{ env.MONGO_PASSWORD }} \
+            ${{ vars.DOCKER_USERNAME }}/solar-system:${{ github.sha }}
+
+          echo "Testing the Docker images using wget"
+          wget -q -O - 127.0.0.1:3000/live | grep live
