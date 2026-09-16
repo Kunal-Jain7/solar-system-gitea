@@ -106,6 +106,10 @@ jobs:
           echo "Testing the Docker images using wget"
           wget -q -O - 127.0.0.1:3000/live | grep live
 
+      - name: Set Lowercase Docker Username
+        run: |
+          echo "REPO_OWNER=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
 
       - name: Docker Image Push to Dockerhub
         uses: docker/build-push-action@v5
@@ -114,4 +118,4 @@ jobs:
           push: true
           tags: |
             ${{ vars.DOCKER_USERNAME }}/solar-system:${{ github.sha }}
-            ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha }}
+            ghcr.io/${{ env.REPO_OWNER }}/solar-system:${{ github.sha }}
